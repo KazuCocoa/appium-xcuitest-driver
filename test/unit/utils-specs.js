@@ -1,6 +1,7 @@
 import {
   clearSystemFiles, translateDeviceName,
-  markSystemFilesForCleanup, isLocalHost } from '../../lib/utils';
+  markSystemFilesForCleanup, isLocalHost,
+  hasDifferentProcessArguments } from '../../lib/utils';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { withMocks } from 'appium-test-support';
@@ -116,6 +117,84 @@ describe('utils', function () {
     });
     it('should be false with ipv6 2001:db8:85a3:8d3:1319:8a2e:370:7348', function () {
       isLocalHost('http://[2001:db8:85a3:8d3:1319:8a2e:370:7348]').should.be.false;
+    });
+  });
+
+  describe('hasDifferentProcessArguments', function () {
+    it('should match with undefined', function () {
+      hasDifferentProcessArguments(undefined, undefined).should.be.false;
+    });
+    it('should match with blank', function () {
+      hasDifferentProcessArguments({}, {}).should.be.false;
+    });
+    it('should match with no values', function () {
+      hasDifferentProcessArguments(
+        {args: [], env: {}}, {args: [], env: {}}
+      ).should.be.false;
+    });
+    it('should match with blank args', function () {
+      hasDifferentProcessArguments(
+        {args: []}, {args: []}
+      ).should.be.false;
+    });
+    it('should match with blank env', function () {
+      hasDifferentProcessArguments(
+        {env: {}}, {env: {}}
+      ).should.be.false;
+    });
+    it('should match', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'y', 'z'], env: {'HAPPY': 'testing'}},
+        {args: ['x', 'y', 'z'], env: {'HAPPY': 'testing'}}
+      ).should.be.false;
+    });
+    it('should not match caps args', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'y'], env: {'HAPPY': 'testing'}},
+        {args: ['x', 'y', 'z'], env: {'HAPPY': 'testing'}}
+      ).should.be.true;
+    });
+    it('should not match actual args', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'z'], env: {'HAPPY': 'testing'}},
+        {args: ['x', 'y', 'z'], env: {'HAPPY': 'testing'}}
+      ).should.be.true;
+    });
+    it('should not match caps env', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'z'], env: {'HAPPY': 'another testing'}},
+        {args: ['x', 'y'], env: {'HAPPY': 'testing'}}
+      ).should.be.true;
+    });
+    it('should not match actual env', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'z'], env: {'HAPPY': 'testing'}},
+        {args: ['x', 'y'], env: {'HAPPY': 'another testing'}}
+      ).should.be.true;
+    });
+    it('should not match caps env key', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'z'], env: {'APPIUM_HAPPY': 'testing'}},
+        {args: ['x', 'y'], env: {'HAPPY': 'testing'}}
+      ).should.be.true;
+    });
+    it('should not match actual env key', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'z'], env: {'HAPPY': 'testing'}},
+        {args: ['x', 'y'], env: {'APPIUM_HAPPY': 'testing'}}
+      ).should.be.true;
+    });
+    it('should not match no key caps env', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'z'], env: {}},
+        {args: ['x', 'y'], env: {'HAPPY': 'another testing'}}
+      ).should.be.true;
+    });
+    it('should not match no key actual env', function () {
+      hasDifferentProcessArguments(
+        {args: ['x', 'z'], env: {'HAPPY': 'another testing'}},
+        {args: ['x', 'y'], env: {}}
+      ).should.be.true;
     });
   });
 });
