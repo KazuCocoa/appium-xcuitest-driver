@@ -24,7 +24,7 @@ On top of standard Appium requirements XCUITest driver also expects the followin
 - Only macOS is supported as the host platform
 - Xcode and developer tools must be installed. Note, that usually some time is needed for the Appium team to pick up with the support of the most recent Xcode versions, especially beta ones.
 - Connected real devices must be trusted, added to your developer profile and configured properly along with WebDriverAgent signing. Read [Real devices](#real-devices) section _carefully_ to set them up properly before running your tests.
-- The minimum supported Xcode SDK version for the current driver snapshot is *10.2 (iOS 12.2)*. Consider using earlier releases of the driver (see [Xcode version support](#xcode-version-support) section below) if it is necessary to test older iOS versions on real devices. Also, it is highly recommended to always use the same major version of Xcode SDK, which was used to build the particular iOS/tvOS version on your real device under test (for example Xcode 11 for iOS 13, Xcode 12 for iOS 14, etc).
+- The minimum supported Xcode SDK version for the current driver snapshot is *12 (iOS 12)*. Consider using earlier releases of the driver (see [Xcode version support](#xcode-version-support) section below) if it is necessary to test older iOS versions on real devices. Also, it is highly recommended to always use the same major version of Xcode SDK, which was used to build the particular iOS/tvOS version on your real device under test (for example Xcode 11 for iOS 13, Xcode 12 for iOS 14, etc).
 - Web views must be debuggable in order to test them. If it is not possible to connect to your web view(s) using [Safari remote debugger](https://appletoolbox.com/use-web-inspector-debug-mobile-safari/) then XCUITest won't be able to connect to them as well.
 - Since version 3.33.0 (included into Appium 1.20.0+) of XCUITest driver the [Carthage](https://github.com/Carthage/Carthage) dependency *is not needed anymore*. Prior to that version it was required and could be installed using [brew](https://brew.sh/): `brew install carthage`.
 
@@ -42,6 +42,7 @@ On top of standard Appium requirements XCUITest driver also expects the followin
 * module version `2.96.0` and above only supports XCode 9 and newer
 * module version `3.0.0` and above only supports Xcode 10 and newer
 * module version `3.32.0` and above only supports Xcode 10.2 and newer
+* module version `4.0.0` and above only supports Xcode 12 and newer
 
 
 ## Real devices
